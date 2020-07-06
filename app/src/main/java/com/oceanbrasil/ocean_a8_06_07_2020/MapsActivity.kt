@@ -14,6 +14,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
@@ -51,7 +52,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         ultimaLocalizacao?.let {
             val latLng = LatLng(it.latitude, it.longitude)
-            mMap.addMarker(MarkerOptions().position(latLng).title("Minha posição"))
+            mMap.addMarker(
+                MarkerOptions()
+                    .position(latLng)
+                    .title("Minha posição")
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_motoboy))
+            )
+
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17f))
 
             mMap.addCircle(
