@@ -15,8 +15,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 
-const val LOCATION_PERMISSION_REQUEST_CODE = 1
-
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
@@ -37,29 +35,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             if (checkSelfPermission(ACCESS_FINE_LOCATION) == PERMISSION_GRANTED) {
                 // Temos a permissão, podemos iniciar a localização
                 Toast.makeText(this, "Permissão de Localização concedida.", Toast.LENGTH_LONG).show()
-            } else {
-                // Não temos a permissão, solicitamos ao usuário
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(ACCESS_FINE_LOCATION),
-                    LOCATION_PERMISSION_REQUEST_CODE
-                )
-
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish()
             }
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE
-            && grantResults[0] == PERMISSION_GRANTED) {
-            iniciarLocalizacao()
         }
     }
 
