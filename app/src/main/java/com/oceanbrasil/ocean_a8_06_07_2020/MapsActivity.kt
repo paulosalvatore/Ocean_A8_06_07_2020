@@ -1,8 +1,12 @@
 package com.oceanbrasil.ocean_a8_06_07_2020
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
@@ -26,17 +30,53 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-
-        iniciarLocalizacao()
     }
 
     private fun iniciarLocalizacao() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(ACCESS_FINE_LOCATION) == PERMISSION_GRANTED) {
-                // Temos a permissão, podemos iniciar a localização
-                Toast.makeText(this, "Permissão de Localização concedida.", Toast.LENGTH_LONG).show()
+            if (checkSelfPermission(ACCESS_FINE_LOCATION) != PERMISSION_GRANTED) {
+                return
             }
+        } else {
+            return
         }
+
+        // Temos a permissão, podemos iniciar o LocationManager que pegará a localização do usuário
+
+        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+        val locationProvider = LocationManager.GPS_PROVIDER
+
+        val ultimaLocalizacao = locationManager.getLastKnownLocation(locationProvider)
+
+        ultimaLocalizacao?.let {
+            val latLng = LatLng(it.latitude, it.longitude)
+            mMap.addMarker(MarkerOptions().position(latLng).title("Minha posição"))
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17f))
+        }
+
+        locationManager.requestLocationUpdates(
+            locationProvider,
+            1000L,
+            1F,
+            object : LocationListener {
+                override fun onLocationChanged(location: Location?) {
+                    location?.let {
+                        val latLng = LatLng(it.latitude, it.longitude)
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17f))
+                    }
+                }
+
+                override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+                }
+
+                override fun onProviderEnabled(provider: String?) {
+                }
+
+                override fun onProviderDisabled(provider: String?) {
+                }
+            }
+        )
     }
 
     /**
@@ -55,6 +95,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val samsungOcean = LatLng(-23.5567841, -46.7349922)
         mMap.addMarker(MarkerOptions().position(samsungOcean).title("Samsung Ocean - USP - São Paulo"))
 //        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(samsungOcean, 17f))
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(samsungOcean, 17f))
+//        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(samsungOcean, 17f))
+
+        iniciarLocalizacao()
     }
 }
