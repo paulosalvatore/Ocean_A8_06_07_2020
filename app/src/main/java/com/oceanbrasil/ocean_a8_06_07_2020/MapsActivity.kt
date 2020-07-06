@@ -2,22 +2,22 @@ package com.oceanbrasil.ocean_a8_06_07_2020
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.graphics.Color
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -53,6 +53,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             val latLng = LatLng(it.latitude, it.longitude)
             mMap.addMarker(MarkerOptions().position(latLng).title("Minha posição"))
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17f))
+
+            mMap.addCircle(
+                CircleOptions()
+                    .center(latLng)
+                    .radius(50.0)
+                    .strokeColor(Color.RED)
+                    .fillColor(Color.BLUE))
         }
 
         locationManager.requestLocationUpdates(
