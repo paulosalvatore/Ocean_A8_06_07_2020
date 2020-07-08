@@ -20,6 +20,11 @@ class MainActivity : AppCompatActivity() {
         btAbrirMapa.setOnClickListener {
             abrirMapa()
         }
+
+        btAbrirLista.setOnClickListener {
+            val intent = Intent(this, ListaActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun abrirMapa() {

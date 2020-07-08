@@ -37,4 +37,9 @@ dependencies {
     // Google Maps
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
+    // RecyclerView
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+
+    // CardView
+    implementation 'androidx.cardview:cardview:1.0.0'
 }
